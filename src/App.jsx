@@ -1,4 +1,4 @@
-// VERSION: 1.4
+// VERSION: 1.5
 // DODO Learning — Student Enrollment Welcome Packet PDF Generator
 // Generates multi-page PDF via jsPDF + html2canvas
 //
@@ -73,19 +73,19 @@ function PDFPageWelcome({ info }) {
         </div>
 
         {/* Greeting */}
-        <div style={{ fontSize: 15, fontWeight: 600, color: B.brown, marginBottom: 16, fontFamily: F }}>
+        <div style={{ fontSize: 15, fontWeight: 600, color: B.brown, marginBottom: 16, fontFamily: F, textAlign: "left" }}>
           Dear {info.name || "Student"},
         </div>
 
         {/* English body */}
         <div style={{ fontSize: 11.5, lineHeight: 1.85, color: B.ink, marginBottom: 18, textAlign: "justify" }}>
-          <p style={{ margin: "0 0 12px" }}>
+          <p style={{ margin: "0 0 12px", textIndent: "2em" }}>
             Welcome to DODO Learning! We are absolutely thrilled to have you join our family, where learning is an adventure, and goals are reached. Our dedicated teachers and staff are here to guide you every step of the way, creating a nurturing and dynamic learning environment tailored to help you succeed. Whether this is your first step with us or you're continuing your journey, know that you are in a place where you are valued, supported, and encouraged to shine.
           </p>
-          <p style={{ margin: "0 0 12px" }}>
+          <p style={{ margin: "0 0 12px", textIndent: "2em" }}>
             As you embark on this exciting chapter, we encourage you to embrace every opportunity, ask questions, make new friends, and, most importantly, believe in yourself. You have a unique voice, and we can't wait to see how you will contribute to and enrich our community.
           </p>
-          <p style={{ margin: 0 }}>
+          <p style={{ margin: 0, textIndent: "2em" }}>
             Once again, welcome to DODO Learning! We can't wait to see all the incredible things you will accomplish.
           </p>
         </div>
@@ -95,13 +95,13 @@ function PDFPageWelcome({ info }) {
 
         {/* Chinese body */}
         <div style={{ fontSize: 11, lineHeight: 1.9, color: B.ink, marginBottom: 22, textAlign: "justify" }}>
-          <p style={{ margin: "0 0 10px" }}>
+          <p style={{ margin: "0 0 10px", textIndent: "2em" }}>
             欢迎来到 DODO Learning!很高兴你能加入我们,让学习成为一场奔向目标的冒险。我们的专业教师团队将为你提供温暖且充满动力的学习环境,全方位助力你的成功。在这里,你是被珍视的个体;在这里,我们全力支持你尽情闪耀。
           </p>
-          <p style={{ margin: "0 0 10px" }}>
+          <p style={{ margin: "0 0 10px", textIndent: "2em" }}>
             站在这个新起点上,请尽情拥抱每一个机会,保持好奇,并坚定地相信自己。我们非常期待看到你独一无二的才华将如何点亮我们的社区。
           </p>
-          <p style={{ margin: 0 }}>
+          <p style={{ margin: 0, textIndent: "2em" }}>
             欢迎开启这段精彩旅程,期待见证你的每一份卓越成就!
           </p>
         </div>
@@ -244,27 +244,9 @@ function PDFPageDetails({ info, schedule, literacyAbout, literacyOverview, writi
   const hasTeacher = !!(teacherImg || (teacherIntro && teacherIntro.trim()));
   const hasParentNotes = !!(parentNotes && parentNotes.trim());
 
-  const HEADER_H = 74, FOOTER_H = 52, CONTENT_PAD_V = 26, GAP = 12;
-  const USABLE_H = PH - HEADER_H - FOOTER_H - CONTENT_PAD_V;
-
-  useEffect(() => {
-    if (!measureRef.current) return;
-    const children = Array.from(measureRef.current.children);
-    if (children.length === 0) { setPageGroups([]); return; }
-    const groups = [[]];
-    let used = 0;
-    children.forEach((el, i) => {
-      const h = el.offsetHeight;
-      const extra = groups[groups.length - 1].length > 0 ? GAP : 0;
-      if (used + extra + h > USABLE_H && groups[groups.length - 1].length > 0) {
-        groups.push([]);
-        used = 0;
-      }
-      groups[groups.length - 1].push(i);
-      used += (groups[groups.length - 1].length > 1 ? GAP : 0) + h;
-    });
-    setPageGroups(groups);
-  }, [literacyAbout, literacyOverview, writingOverview, teacherImg, teacherIntro, parentNotes]);
+  const GAP = 12;
+  // Available content height per page (PH minus header ~74, footer ~52, top+bottom padding ~28)
+  const USABLE_H = PH - 74 - 52 - 28;
 
   const SS = { background: B.white, borderRadius: 8, padding: "14px 16px 16px", border: `1px solid ${B.border}` };
   const HD = { marginBottom: 8, paddingBottom: 6, borderBottom: `1px solid ${B.border}` };
@@ -310,20 +292,49 @@ function PDFPageDetails({ info, schedule, literacyAbout, literacyOverview, writi
     ),
   ].filter(Boolean);
 
-  // Measurement phase — render sections off-screen to measure heights
-  if (!pageGroups) {
-    return (
-      <div ref={measureRef} style={{ position: "fixed", left: -19999, top: 0, width: PW - 2 * PAD, visibility: "hidden" }}>
-        {sections}
-      </div>
-    );
-  }
+  // Whenever content changes: immediately reset to null so fallback renders,
+  // then after paint settle measure actual heights and set proper page groups.
+  useEffect(() => {
+    setPageGroups(null); // reset → fallback (all sections on one page) renders immediately
+    const t = setTimeout(() => {
+      if (!measureRef.current) return;
+      const children = Array.from(measureRef.current.children);
+      if (children.length === 0) { setPageGroups([]); return; }
+      const groups = [[]];
+      let used = 0;
+      for (let i = 0; i < children.length; i++) {
+        const h = children[i].offsetHeight;
+        const gapCost = groups[groups.length - 1].length > 0 ? GAP : 0;
+        if (used + gapCost + h > USABLE_H && groups[groups.length - 1].length > 0) {
+          groups.push([]);
+          used = 0;
+        }
+        groups[groups.length - 1].push(i);
+        used += (groups[groups.length - 1].length > 1 ? GAP : 0) + h;
+      }
+      setPageGroups(groups);
+    }, 120);
+    return () => clearTimeout(t);
+  }, [literacyAbout, literacyOverview, writingOverview, teacherImg, teacherIntro, parentNotes]);
 
-  if (pageGroups.length === 0) return null;
+  // displayGroups: when null (measuring) always fall back to all-on-one-page so
+  // pdf-details-0 is ALWAYS in the DOM whenever there is content — prevents missing pages.
+  const displayGroups = pageGroups === null
+    ? (sections.length > 0 ? [sections.map((_, i) => i)] : [])
+    : pageGroups.length > 0 ? pageGroups : (sections.length > 0 ? [sections.map((_, i) => i)] : []);
 
   return (
     <>
-      {pageGroups.map((group, pi) => (
+      {/* Always-present off-screen measurement div — ref always attached */}
+      <div
+        ref={measureRef}
+        style={{ position: "fixed", left: -29999, top: 0, width: PW - 2 * PAD, visibility: "hidden", pointerEvents: "none", zIndex: -9999 }}
+      >
+        {sections}
+      </div>
+
+      {/* Actual PDF pages */}
+      {displayGroups.map((group, pi) => (
         <div key={pi} id={`pdf-details-${pi}`} style={{ width: PW, height: PH, background: B.cream, fontFamily: F, color: B.ink, boxSizing: "border-box", overflow: "hidden", display: "flex", flexDirection: "column" }}>
           <PDFHeader />
           <div style={{ padding: `14px ${PAD}px 12px`, display: "flex", flexDirection: "column", gap: GAP, flex: 1 }}>
