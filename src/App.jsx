@@ -1,4 +1,4 @@
-// VERSION: 1.5
+// VERSION: 1.6
 // DODO Learning — Student Enrollment Welcome Packet PDF Generator
 // Generates multi-page PDF via jsPDF + html2canvas
 //
@@ -78,7 +78,7 @@ function PDFPageWelcome({ info }) {
         </div>
 
         {/* English body */}
-        <div style={{ fontSize: 11.5, lineHeight: 1.85, color: B.ink, marginBottom: 18, textAlign: "justify" }}>
+        <div style={{ fontSize: 12.5, lineHeight: 1.85, color: B.ink, marginBottom: 18, textAlign: "justify" }}>
           <p style={{ margin: "0 0 12px", textIndent: "2em" }}>
             Welcome to DODO Learning! We are absolutely thrilled to have you join our family, where learning is an adventure, and goals are reached. Our dedicated teachers and staff are here to guide you every step of the way, creating a nurturing and dynamic learning environment tailored to help you succeed. Whether this is your first step with us or you're continuing your journey, know that you are in a place where you are valued, supported, and encouraged to shine.
           </p>
@@ -94,7 +94,7 @@ function PDFPageWelcome({ info }) {
         <div style={{ width: "100%", height: 1, background: B.border, marginBottom: 18 }} />
 
         {/* Chinese body */}
-        <div style={{ fontSize: 11, lineHeight: 1.9, color: B.ink, marginBottom: 22, textAlign: "justify" }}>
+        <div style={{ fontSize: 12, lineHeight: 1.9, color: B.ink, marginBottom: 22, textAlign: "justify" }}>
           <p style={{ margin: "0 0 10px", textIndent: "2em" }}>
             欢迎来到 DODO Learning!很高兴你能加入我们,让学习成为一场奔向目标的冒险。我们的专业教师团队将为你提供温暖且充满动力的学习环境,全方位助力你的成功。在这里,你是被珍视的个体;在这里,我们全力支持你尽情闪耀。
           </p>
@@ -108,13 +108,13 @@ function PDFPageWelcome({ info }) {
 
         {/* Warmest regards + Signature */}
         <div style={{ marginTop: 18, display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-          <div style={{ fontSize: 12, fontWeight: 600, color: B.brown, marginBottom: 12, fontStyle: "italic" }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: B.brown, marginBottom: 12, fontStyle: "italic" }}>
             Warmest regards,
           </div>
           <img src={SIGNATURE_B64} alt="Signature" style={{ height: 60, width: "auto", marginBottom: 4, objectFit: "contain" }} />
-          <div style={{ fontSize: 12, fontWeight: 700, color: B.brown }}>Janet</div>
-          <div style={{ fontSize: 10, color: B.muted, marginBottom: 2 }}>Education Director</div>
-          <div style={{ fontSize: 10, color: B.muted }}>DODO Learning</div>
+          <div style={{ fontSize: 13, fontWeight: 700, color: B.brown }}>Janet</div>
+          <div style={{ fontSize: 11, color: B.muted, marginBottom: 2 }}>Learning Director</div>
+          <div style={{ fontSize: 11, color: B.muted }}>DODO Learning</div>
         </div>
       </div>
       <PDFFooter />
@@ -180,8 +180,8 @@ function PDFPageInfo({ info, qrImages }) {
               { key: "qr3", title: "在线研习室班级", titleEn: "The Hangar" },
             ].map(qr => (
               <div key={qr.key} style={{ textAlign: "center", padding: 8, background: B.greenLight, borderRadius: 8, border: `1px solid ${B.border}` }}>
-                <div style={{ fontSize: 10, fontWeight: 700, color: B.green, marginBottom: 2 }}>{qr.title}</div>
-                {qr.titleEn && <div style={{ fontSize: 9, color: B.muted, marginBottom: 6 }}>{qr.titleEn}</div>}
+                <div style={{ fontSize: 11, fontWeight: 700, color: B.green, marginBottom: 2 }}>{qr.title}</div>
+                {qr.titleEn && <div style={{ fontSize: 10, color: B.muted, marginBottom: 6 }}>{qr.titleEn}</div>}
                 {!qr.titleEn && <div style={{ marginBottom: 6 }} />}
                 <div style={{ width: 120, height: 120, margin: "0 auto", background: B.white, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", border: `1px solid ${B.border}` }}>
                   {qrImages[qr.key] ? (
@@ -257,19 +257,19 @@ function PDFPageDetails({ info, schedule, literacyAbout, literacyOverview, writi
     hasLiteracyAbout && (
       <div key="la" style={SS}>
         <div style={HD}><span style={TT}>About Literacy & Fluency Course </span><span style={ST}>关于精读表达课</span></div>
-        <div style={{ fontSize: 10, lineHeight: 1.75, color: B.ink, whiteSpace: "pre-wrap", textAlign: "left" }}>{literacyAbout}</div>
+        <div style={{ fontSize: 11, lineHeight: 1.75, color: B.ink, whiteSpace: "pre-wrap", textAlign: "left" }}>{literacyAbout}</div>
       </div>
     ),
     hasLiteracyOverview && (
       <div key="lo" style={SS}>
         <div style={HD}><span style={TT}>Literacy & Fluency Course Overview </span><span style={ST}>精读表达课课程大纲</span></div>
-        <div style={{ fontSize: 10, lineHeight: 1.75, color: B.ink, whiteSpace: "pre-wrap", textAlign: "left" }}>{literacyOverview}</div>
+        <div style={{ fontSize: 11, lineHeight: 1.75, color: B.ink, whiteSpace: "pre-wrap", textAlign: "left" }}>{literacyOverview}</div>
       </div>
     ),
     hasWritingOverview && (
       <div key="wo" style={SS}>
         <div style={HD}><span style={TT}>Writing & Composition Course Overview </span><span style={ST}>大师写作专项课程大纲</span></div>
-        <div style={{ fontSize: 10, lineHeight: 1.75, color: B.ink, whiteSpace: "pre-wrap", textAlign: "left" }}>{writingOverview}</div>
+        <div style={{ fontSize: 11, lineHeight: 1.75, color: B.ink, whiteSpace: "pre-wrap", textAlign: "left" }}>{writingOverview}</div>
       </div>
     ),
     hasTeacher && (
@@ -279,7 +279,7 @@ function PDFPageDetails({ info, schedule, literacyAbout, literacyOverview, writi
           <div style={{ width: 100, height: 120, borderRadius: 8, overflow: "hidden", border: `1px solid ${B.border}`, flexShrink: 0, background: B.greenLight, display: "flex", alignItems: "center", justifyContent: "center" }}>
             {teacherImg ? <img src={teacherImg} alt="Teacher" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <div style={{ fontSize: 9, color: B.border }}>Photo</div>}
           </div>
-          <div style={{ flex: 1, fontSize: 10, lineHeight: 1.75, color: B.ink, whiteSpace: "pre-wrap", textAlign: "left" }}>{teacherIntro || ""}</div>
+          <div style={{ flex: 1, fontSize: 11, lineHeight: 1.75, color: B.ink, whiteSpace: "pre-wrap", textAlign: "left" }}>{teacherIntro || ""}</div>
         </div>
       </div>
     ),
@@ -287,7 +287,7 @@ function PDFPageDetails({ info, schedule, literacyAbout, literacyOverview, writi
       <div key="pn" style={SS}>
         <div style={HD}><span style={TT}>致家长和亲爱的你</span></div>
         <div style={{ fontSize: 11, color: B.muted, fontStyle: "italic", textAlign: "center", marginBottom: 10 }}>进步，源于每一天的坚持与尊重。</div>
-        <div style={{ fontSize: 10, lineHeight: 1.75, color: B.ink, whiteSpace: "pre-wrap", textAlign: "left" }}>{parentNotes}</div>
+        <div style={{ fontSize: 11, lineHeight: 1.75, color: B.ink, whiteSpace: "pre-wrap", textAlign: "left" }}>{parentNotes}</div>
       </div>
     ),
   ].filter(Boolean);
@@ -364,7 +364,7 @@ function PDFPageTerms({ schedule }) {
             <span style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: B.brown, fontWeight: 700 }}>Lesson Schedule </span>
             <span style={{ fontSize: 11, color: B.muted }}>上课时间</span>
           </div>
-          <div style={{ fontSize: 10.5, lineHeight: 1.8, color: B.ink }}>
+          <div style={{ fontSize: 11.5, lineHeight: 1.8, color: B.ink }}>
             <div style={{ display: "grid", gridTemplateColumns: "170px 1fr", gap: 4, rowGap: 6 }}>
               <div style={{ fontWeight: 700, color: B.brown }}>课程组合：</div>
               <div>{schedule?.combo || "—"}</div>
@@ -389,7 +389,7 @@ function PDFPageTerms({ schedule }) {
         <div style={{ background: B.white, borderRadius: 8, padding: "12px 14px 14px", marginBottom: 10, border: `1px solid ${B.border}` }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: B.green, marginBottom: 6, letterSpacing: 1 }}>我们的承诺</div>
           <div style={{ fontSize: 9, color: B.muted, marginBottom: 8, fontStyle: "italic" }}>我们将全力以赴，为您开启成长之门。</div>
-          <div style={{ fontSize: 9.5, lineHeight: 1.75, color: B.ink, textAlign: "left" }}>
+          <div style={{ fontSize: 10.5, lineHeight: 1.75, color: B.ink, textAlign: "left" }}>
             <div style={{ marginBottom: 6 }}>
               <span style={{ fontWeight: 700, color: B.brown }}>• 教学保障：</span>准时提供高标准的教师，课程及学术支持。若老师因病或特殊情况缺勤，我们负责安排补课。
             </div>
@@ -418,7 +418,7 @@ function PDFPageTerms({ schedule }) {
         <div style={{ background: B.white, borderRadius: 8, padding: "12px 14px 14px", border: `1px solid ${B.border}` }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: B.green, marginBottom: 6, letterSpacing: 1 }}>你的成长守则</div>
           <div style={{ fontSize: 9, color: B.muted, marginBottom: 8, fontStyle: "italic" }}>进步，源于每一天的坚持与尊重。</div>
-          <div style={{ fontSize: 9.5, lineHeight: 1.75, color: B.ink, textAlign: "left" }}>
+          <div style={{ fontSize: 10.5, lineHeight: 1.75, color: B.ink, textAlign: "left" }}>
             <div style={{ marginBottom: 6 }}>
               <span style={{ fontWeight: 700, color: B.brown }}>• 课堂礼仪与约定：</span>缺席请提前 48 小时通知（一对一课程无法补课 & 小组课请看回放）。课中保持礼貌与尊重，共同维护舒适的课堂环境，违规干扰者将无法继续上课且不予退费。
             </div>
